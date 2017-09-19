@@ -9,7 +9,9 @@ var key = fun_aes.CryptoJS.enc.Utf8.parse("5de7e29919fad4d5");
 //十六位十六进制数作为秘钥偏移量
 var iv = fun_aes.CryptoJS.enc.Utf8.parse('1234567890123456'); 
 Page({
-    data: {},
+    data: {
+      carArray: []
+    },
     selectMenu: function (e) {
         var index = e.currentTarget.dataset.itemIndex;
         this.setData({
@@ -21,8 +23,8 @@ Page({
     decreaseCart: function (e) {
         var index = e.currentTarget.dataset.itemIndex;
         var parentIndex = e.currentTarget.dataset.parentindex;
-        this.data.goods[parentIndex].foods[index].Count--
-        var num = this.data.goods[parentIndex].foods[index].Count;
+        this.data.goods[parentIndex].foods[index].shopcount--
+        var num = this.data.goods[parentIndex].foods[index].shopcount;
         var mark = 'a' + index + 'b' + parentIndex
         var price = this.data.goods[parentIndex].foods[index].price;
         var obj = { price: price, num: num, mark: mark, name: name, index: index, parentIndex: parentIndex };
@@ -57,24 +59,24 @@ Page({
         console.log('1');
         this.decreaseCart(e);
     },
-    //添加到购物车
+    //添加到购物车  这个函数是要把数据添加到购物车
     addCart(e) {
-        var index = e.currentTarget.dataset.itemIndex;
-        var parentIndex = e.currentTarget.dataset.parentindex;
-        this.data.goods[parentIndex].foods[index].Count++;
-        var mark = 'a' + index + 'b' + parentIndex
-        var price = this.data.goods[parentIndex].foods[index].price;
-        var num = this.data.goods[parentIndex].foods[index].Count;
-        var name = this.data.goods[parentIndex].foods[index].name;
-        var obj = { price: price, num: num, mark: mark, name: name, index: index, parentIndex: parentIndex };
-        var carArray1 = this.data.carArray.filter(item => item.mark != mark)
-        carArray1.push(obj)
-        console.log(carArray1);
+        var index = e.currentTarget.dataset.itemIndex;   //这是要拿到大模块里的第几个
+        var parentIndex = e.currentTarget.dataset.parentindex;  //这里是要确定是热销凉菜，热菜的哪个模块
+        let thisGoods = this.data.goods[parentIndex].goodsList[index]
+        var price = thisGoods.price;
+        var num = thisGoods.ordered;
+        var name = thisGoods.name;
+        var obj = { price: price, num: num,  name: name, index: index, parentIndex: parentIndex };
+        console.log("this data detail")
+        console.log(this.data.goods[parentIndex].goodsList[index])
+        var carArray = this.data.carArray
+        carArray.push(obj)
+        // console.log(carArray);
         this.setData({
-            carArray: carArray1,
-            goods: this.data.goods
+          carArray: carArray
         })
-        this.calTotalPrice();
+        this.calTotalPrice();      //计算总价
         this.setData({
             payDesc: this.payDesc()
         })
@@ -87,9 +89,10 @@ Page({
         var carArray = this.data.carArray;
         var totalPrice = 0;
         var totalCount = 0;
+        console.log(carArray)
         for (var i = 0; i < carArray.length; i++) {
             totalPrice += carArray[i].price * carArray[i].num;
-            totalCount += carArray[i].num
+            totalCount += Number(carArray[i].num)
         }
         this.setData({
             totalPrice: totalPrice,
@@ -145,6 +148,7 @@ Page({
         }
         console.log(this.data.cartShow);
     },
+   
     tabChange: function (e) {
         var showtype = e.target.dataset.type;
         this.setData({
@@ -154,7 +158,7 @@ Page({
       var srcs1 = fun_aes.CryptoJS.enc.Utf8.parse(word);
       var encrypted1 = fun_aes.CryptoJS.AES.encrypt(srcs1, key, { iv: iv, mode: fun_aes.CryptoJS.mode.ECB, padding: fun_aes.CryptoJS.pad.Pkcs7 });
       //返回base64加密结果
-      console.log("dddddd");
+      
       return encrypted1.toString();
     },
     onLoad: function (options) {

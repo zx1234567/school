@@ -6,6 +6,7 @@
         <image src="http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg" style="width:64px;height:64px;margin-top:5px;"></image>
       </view>
       <view class="content">
+      <image src="../image/caidan.png" style="width:20px;height:15px;position: absolute; top: 10px;left: 10px;"></image>
         <view class="title">
           <image src="../image/brand@2x.png" style="width:30px;height:18px;"></image>
           <span class="name">骑士驿站</span>
@@ -82,10 +83,10 @@
           <view class="cartControl-wrapper">
             <view class="cartControl">
               <view name="fade">
-                <view class="cart-decrease" wx:if="{{food.Count > 0}}" data-item-index="{{index}}" data-parentIndex="{{parentIndex}}" catchtap="decreaseCart">
+                <view class="cart-decrease" wx:if="{{food.shopcount > 0}}" data-item-index="{{index}}" data-parentIndex="{{parentIndex}}" catchtap="decreaseCart">
                   <view class="inner iconfont icon-jian" style="font-size:24px;color:#00A0DC;"></view>
                 </view>
-                <view class="cart-count" wx:if="{{food.Count > 0 }}">{{food.Count}}</view>
+                <view class="cart-count" wx:if="{{food.shopcount > 0 }}">{{food.shopcount}}</view>
                 <view class=" iconfont icon-jia cart-add " style="color:#00A0DC; " data-item-index="{{index}}" data-parentIndex="{{parentIndex}}" catchtap="addCart"></view>
               </view>
             </view>
@@ -117,10 +118,10 @@
           </view>
         </view>
         <view class="shopcart-list" style="display:{{cartShow}}">
-          <view class="list-header">
+           <view class="list-header">
             <view class="title">购物车</view>
             <text class="empty" bindtap="empty">清空</text>
-          </view>
+          </view> 
           <view class="list-content">
             <view class="shopcart-food" wx:for="{{carArray}}">
               <text class="name">{{item.name}}</text>
